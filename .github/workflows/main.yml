@@ -1,73 +1,31 @@
 
-# RDP Setup - Remote Desktop Server
+name: RDP Desktop Setup
 
-A simple automated setup project for creating a remote desktop environment on a Linux VPS.
+on:
+  workflow_dispatch:
 
-## Features
-- XFCE Desktop Environment
-- XRDP Remote Desktop Server
-- Secure RDP login
-- Easy installation
-- Ubuntu/Debian support
+jobs:
+  setup:
+    runs-on: ubuntu-22.04
 
-## Requirements
-- Ubuntu 22.04 / 24.04
-- Minimum 2 GB RAM recommended
-- Root or sudo access
-- Public IP address
-- Open TCP port 3389
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-## Installation
+      - name: Update System
+        run: |
+          sudo apt-get update
 
-Update system:
+      - name: Install Desktop Environment
+        run: |
+          sudo apt-get install -y xfce4 xfce4-goodies xrdp
 
-```bash
-sudo apt update && sudo apt upgrade -y
-```
+      - name: Configure XRDP
+        run: |
+          sudo systemctl enable xrdp
+          sudo systemctl start xrdp
 
-Install desktop environment:
-
-```bash
-sudo apt install xfce4 xfce4-goodies xrdp -y
-```
-
-Enable XRDP:
-
-```bash
-sudo systemctl enable xrdp
-sudo systemctl start xrdp
-```
-
-Set desktop session:
-
-```bash
-echo "startxfce4" > ~/.xsession
-```
-
-Configure firewall:
-
-```bash
-sudo ufw allow 3389/tcp
-```
-
-Restart XRDP:
-
-```bash
-sudo systemctl restart xrdp
-```
-
-## Connect Using RDP
-
-1. Open Remote Desktop Connection on Windows.
-2. Enter your VPS public IP.
-3. Enter your Linux username and password.
-4. Connect.
-
-## Security
-- Use a strong password.
-- Restrict RDP access to trusted IP addresses.
-- Avoid exposing port 3389 publicly.
-- Use a VPN or secure tunnel where possible.
-
-## License
-MIT License
+      - name: Installation Complete
+        run: |
+          echo "Desktop and XRDP installation completed."
+          systemctl status xrdp --no-pager
