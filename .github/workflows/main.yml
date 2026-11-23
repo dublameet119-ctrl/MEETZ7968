@@ -7,25 +7,8 @@ on:
 jobs:
   setup:
     runs-on: ubuntu-22.04
-
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Update System
+      - name: Test Workflow
         run: |
-          sudo apt-get update
-
-      - name: Install Desktop Environment
-        run: |
-          sudo apt-get install -y xfce4 xfce4-goodies xrdp
-
-      - name: Configure XRDP
-        run: |
-          sudo systemctl enable xrdp
-          sudo systemctl start xrdp
-
-      - name: Installation Complete
-        run: |
-          echo "Desktop and XRDP installation completed."
-          systemctl status xrdp --no-pager
+          echo "RDP workflow started successfully"
+          echo "GitHub Actions runner is ready"
